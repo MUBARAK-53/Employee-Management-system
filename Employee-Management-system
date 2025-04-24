@@ -1,0 +1,274 @@
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#define max_employee 1
+
+typedef struct {
+	int salary;
+	char name[50];
+	int adhar;
+	int experience;
+	char emailid[50];
+	int employeecode;
+	int number;
+	int authenticationcode;
+	char clue[50];
+	char hint[50];
+} Emp;
+
+void employeedetails();
+int viewsalary();
+void post();
+void viewemployee();
+int leave();
+void updateinfo();
+
+Emp employee[max_employee];
+
+
+
+int main()
+{	int option;
+	do {
+		printf("Welcome to company!\n");
+		printf("Enter your option!\n");
+
+		printf("1.Enter details:\n");
+		printf("2.view my details:\n");
+		printf("3.view my post:\n");
+		printf("4.view my salary:\n");
+		printf("5.leave application:\n");
+		printf("6.update info!\n");
+		printf("7.Exit!\n");
+		scanf("%d",&option);
+
+		switch(option) {
+		case 1:
+			employeedetails();
+			break;
+		case 2:
+			viewemployee();
+			break;
+		case 3:
+			post();
+			break;
+		case 4:
+			viewsalary();
+			break;
+		case 5:
+			leave();
+			break;
+		case 6:
+			updateinfo();
+			break;
+		case 7:
+			exit(0);
+			break;
+
+		}
+	} while(option!=6);
+
+	return 0;
+}
+
+void employeedetails() {
+	for(int i=0; i<max_employee; i++) {
+		printf("Enter your name:");                //Enter your name
+		scanf("%s", employee[i].name);
+		printf("Enter your adhar details:");      //Enter your adhar details 
+		scanf("%d",&employee[i].adhar);
+		printf("Enter your Email id:");          //Enter your Email ID
+		scanf("%s", employee[i].emailid);
+		printf("Enter your mobile number:");    //Enter your mobile number 
+		scanf("%d",&employee[i].number);
+		printf("Enter your hint:");            //Hint for authentication  
+		scanf("%s",employee[i].hint);
+		srand(time(NULL));
+		employee[i].employeecode= rand()%10000+100; //generate random code to every employee
+		printf("Your Employee code:%d\n",employee[i].employeecode);
+	}
+}
+
+void viewemployee() {
+	for(int i=0; i<max_employee; i++) {
+
+		int choice;
+		char clue[50];
+		printf("Enter your code:"); //code given while registering
+		scanf("%d",&choice);
+		printf("Enter your clue:"); // hint by user
+		scanf("%s",clue);
+
+		if(choice==employee[i].employeecode && strcmp(clue,employee[i].hint)==0) { //compare code& hint to open perosnal detalis
+			printf("name=%s\n",employee[i].name);
+			printf("Adhar=%d\n",employee[i].adhar);
+			printf("EMail ID=%s\n",employee[i].emailid);
+			printf("Mobile number=%d\n",employee[i].number);
+
+		}
+		else {
+			printf("wrong verification!\n");
+		}
+
+	}
+}
+
+
+
+
+void post() {
+	for(int i=0; i<max_employee; i++) {
+		int experience;
+
+		printf("Enter your experience(in yrs):");
+		scanf("%d", &employee[i].experience);
+
+		if(employee[i].experience==0) { //assigning post according to experience
+			printf("trainee\n");
+		}
+		else if(employee[i].experience==5) {
+			printf("Asst.manager\n");
+		}
+		else if(employee[i].experience==10) {
+			printf("Manager\n");
+		}
+		else if(employee[i].experience==15) {
+			printf("senior manager\n");
+		}
+		else if(employee[i].experience==20) {
+			printf("Genreal manager\n");
+		}
+		else {
+			printf("not specified input!\n");
+		}
+	}
+}
+
+int viewsalary() {
+	char post[50];
+	printf("Enter your post:");
+	scanf("%49s",post);
+
+	if( strcmp(post,"General Manager")==0) { //compare post with default post
+		printf("salary=50 LPA\n");
+	}
+	else if(strcmp(post,"Sr.Manager")==0) {
+		printf("salary=35 LPA\n");
+	}
+	else if(strcmp(post,"Manager")==0) {
+		printf("salary=20 LPA\n");
+	}
+	else if(strcmp(post,"trainee")==0) {
+		printf("salary=7 LPA\n");
+	}
+	else {
+		printf("invalid post!");
+	}
+
+
+}
+
+int leave() {
+	int code;
+	int totalleaves=30;
+	int remainingleaves;
+	char choose;
+	for(int i=0; i<max_employee; i++) {
+		printf("Enter your code:");
+		scanf("%d",&code);
+
+		if(code==employee[i].employeecode) {
+
+			printf("Do you want apply for leave(y/n)?");//leaves by user
+			scanf(" %c",&choose);
+
+			if(choose=='y') { //user input for choosing leave to apply
+				int leaves;
+				printf("how many days do you want leave?:"); //asking user how many leaves want
+				scanf("%d",&leaves);
+				if(leaves>=0&&leaves<=30) {
+					printf("Your leave accpeted!\n");
+					remainingleaves=totalleaves-leaves;                    //leaves remaining after applying leaves
+
+					printf("your leaves are=%d\n",leaves); //printing leaves taken
+					printf("your remaining leaves are=%d\n",remainingleaves); //remaining leaves after applied leaves
+
+				}
+			}
+		}
+
+	}
+}
+
+void updateinfo() {
+	char newname[50],newemailid[50];
+	int newnumber,newadhar;
+	int option;
+	char ch;
+	for(int i=0; i<max_employee; i++) {
+		int code;
+		printf("Enter your code:");
+		scanf("%d",&code);
+		if(code==employee[i].employeecode) {
+			printf("what do you want to update?\n");
+			printf("1.Name\n");
+			printf("2.Adhar number:\n");
+			printf("3.Mobile number:\n");
+			printf("4.Email Id:\n");
+			printf("5. Exit!:\n");
+			scanf("%d",&option);
+			do {
+				switch(option) {
+				case 1:
+					printf("Enter your new name:");
+					scanf("%49s",newname);
+					strcpy(employee[i].name,newname);
+					printf("your name is=%s\n",employee[i].name);
+					break;
+
+				case 2:
+					printf("Enter your new Adhar:");
+					scanf("%d",&newadhar);
+					printf("Your Adhar  is=%d\n",newadhar);
+					break;
+
+				case 3:
+					printf("Enter your new mobile number:");
+					scanf("%d",&newnumber);
+					printf("Your Number is=%d\n",newnumber);
+					break;
+
+				case 4:
+					printf("Enter your new Email id:");
+					scanf("%49s",newemailid);
+					strcpy(employee[i].emailid,newemailid);
+					printf("Your Email id  is=%s\n",employee[i].emailid);
+					break;
+
+				case 5:
+					exit(0);
+					break;
+
+				}
+
+				printf("do you want to upate another details(y/n)?\n");
+				scanf(" %c",&ch);
+				if(ch!='n') {
+					printf("what do you want to update?\n");
+					printf("1.Name\n");
+					printf("2.Adhar number:\n");
+					printf("3.Mobile number:\n");
+					printf("4.Email Id:\n");
+					printf("5. Exit!:\n");
+					scanf("%d",&option);
+				}
+			} while(ch!='n');
+		}
+	}
+}
+
+
+
+
